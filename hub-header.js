@@ -1,1 +1,360 @@
-class HubHeader extends HTMLElement{constructor(){super(),this.shadow=this.attachShadow({mode:"open"}),this.resizeObserver=new ResizeObserver(this.handleResize.bind(this))}get containerId(){return this.getAttribute("container-id")}get gridSize(){return this.getAttribute("grid-size")}get icon(){return this.getAttribute("icon")}get title(){return this.getAttribute("title")}get subtitle(){return this.getAttribute("subtitle")}set containerId(n){this.setAttribute("container-id",n)}set gridSize(n){this.setAttribute("grid-size",n)}set icon(n){this.setAttribute("icon",n)}set title(n){this.setAttribute("title",n)}set subtitle(n){this.setAttribute("subtitle",n)}static get observedAttributes(){return["grid-size","icon","title","subtitle"]}attributeChangedCallback(n,e,t){"grid-size"!==n&&"icon"!==n&&"title"!==n&&"subtitle"!==n||this.render()}connectedCallback(){this.resizeObserver.observe(this),this.render()}disconnectedCallback(){this.resizeObserver.disconnect()}handleResize(n){for(const e of n){e.contentRect.width,e.contentRect.height;this.changeHubHeaderStyles()}}changeHubHeaderStyles(){const n=this.shadow.querySelector(".ukg-hub-header");this.offsetWidth;n.className="ukg-hub-header"}render(){this.shadow.innerHTML=`\n    <style>\n:host {\n  --ukg_sys_color_surface_light: #fff;\n  --icon-size: 112px;\n  --ukg_ref_spacing_56: 3.5rem;\n  --ukg_ref_spacing_40: 2.5rem;\n  --ukg_ref_spacing_32: 2rem;\n  --ukg_ref_spacing_16: 1rem;\n  --ukg_sys_color_text_highEmphasis_onLight: rgba(0, 0, 0, 0.87);\n  --ukg_sys_color_border_midEmphasis_onLight: rgba(0, 0, 0, 0.15);\n  --icon-margin: var(--ukg_ref_spacing_16);\n  --icon-total-spacing: calc(var(--icon-size) + var(--icon-margin));\n  --icon-total-spacing-negative: calc(var(--icon-total-spacing) * -1);\n  }\n\n  .ukg-hub-header {\n    box-sizing: border-box;\n    background-color: var(--ukg_sys_color_surface_light);\n    border-bottom-style: solid;\n    border-bottom-width: 1px;\n    border-bottom-color: var(--ukg_sys_color_border_midEmphasis_onLight);\n    display: flex;\n    flex-direction: column;\n    \n  }\n  \n  /* mimic grid margins */\n  @media screen and (max-width: 599px) {\n    .ukg-hub-header {\n      padding-left: var(--ukg_ref_spacing_16);\n      padding-right: var(--ukg_ref_spacing_16);\n    }\n  }\n  @media screen and (min-width: 600px) and (max-width: 767px) {\n    .ukg-hub-header {\n      padding-left: var(--ukg_ref_spacing_32);\n      padding-right: var(--ukg_ref_spacing_32);\n    }\n  }\n  @media screen and (min-width: 768px) and (max-width: 1023px) {\n    .ukg-hub-header {\n      padding-left: var(--ukg_ref_spacing_40);\n      padding-right: var(--ukg_ref_spacing_40);\n    }\n  }\n  @media screen and (min-width: 1024px) {\n    .ukg-hub-header {\n      padding-left: var(--ukg_ref_spacing_56);\n      padding-right: var(--ukg_ref_spacing_56);\n    }\n  }\n  .ukg-header-content-container {\n  margin: var(--ukg_ref_spacing_16) auto;\n  flex: 1 1 100%;\n  width: 100%;\n}\n\n/* mimic grid functionality */\n.ukg-hub-header[grid-size="960"] .ukg-header-content-container,\n.ukg-hub-header[grid-size="default"] .ukg-header-content-container,\n.ukg-hub-header[grid-size=""] .ukg-header-content-container {\n  max-width: 960px;\n}\n.ukg-hub-header[grid-size="1280"] .ukg-header-content-container,\n.ukg-hub-header[grid-size="large-width"] .ukg-header-content-container {\n  max-width: 1280px;\n}\n\n.ukg-header-content {\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.ukg-header-icon-container {\n  order: 0;\n  align-self: auto;\n  flex: 0 0 var(--icon-size);\n  margin-right: var(--ukg_ref_spacing_16);\n}\n\n.ukg-header-icon {\n  height: var(--icon-size);\n  width: var(--icon-size);\n}\n\n.ukg-header-text-container {\n  order: 0;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  align-content: center;\n  align-items: center;\n  flex: 1 1 auto;\n  min-height: var(--icon-size);\n}\n.ukg-header-text {\n  flex: 1 1 auto;\n  align-self: center;\n  margin-right: 1rem;\n}\n\n.ukg-header-title {\n  /* ukg_sys_text_display_sm_onLight is stubbed in here */\n  line-height: 2.5rem;\n  font-family: Volte Rounded, sans-serif;\n  color: var(--ukg_sys_color_text_highEmphasis_onLight);\n  margin-bottom: 1rem;\n  margin-top: 0;\n  font-weight: 500;\n  letter-spacing: -0.0125em;\n  font-size: 2rem;\n  /* needed for header-title */\n  margin: 0;\n}\n\n.ukg-header-subtitle {\n  margin: 0;\n}\n\n.ukg-header-slot-end {\n  order: 0;\n  flex: 1 1 auto;\n  align-self: center;\n  display: flex;\n  justify-content: flex-end;\n}\n.ukg-header-slot-bottom {\n  margin-left: var(--icon-total-spacing);\n}\n\n/* responsive illustrative icon changes */\n/*  0 - 359 :if screen less than 360px don't show illustrative icon */\n    @media screen and (max-width: 359px) {\n    .ukg-header-icon-container, .ukg-header-icon {\n      display: none;\n    }\n    .ukg-header-text-container {\n      order: 0;\n      width: 100%;\n    }\n    \n    .ukg-header-slot-end {\n      width: 100%;\n      justify-content: flex-start;\n    }\n    .ukg-header-slot-bottom {\n          margin-left: 0;\n    }\n  }\n    \n    /* 0 - 599 : if screen <=599 illustrative icon is aligned right (flex order 1) */\n@media screen and (max-width: 599px) {\n  .ukg-header-icon-container {\n    order: 1;\n    margin-left: var(--ukg_ref_spacing_16);\n    margin-right: 0;\n  }\n\n  .ukg-header-text-container {\n    order: 0;\n    align-self: flex-start;\n    justify-content: flex-start;\n    align-items: flex-start;\n  }\n\n  .ukg-header-text {\n    margin-right: 0;\n    flex-direction: column;\n    justify-content: flex-start;\n    align-items: flex-start;\n    padding-right: 0;\n  }\n\n  /* wrap end slot */\n  .ukg-header-slot-end {\n    flex: 1 0 100%;\n    order: 2;\n    align-self: flex-start;\n    justify-content: flex-start;\n    align-items: \n    width: 100%;\n    background: purple;\n  }\n  .ukg-header-slot-bottom {\n  margin-left: 0\n}\n}\n/* 600 - 1365 : show illustrative icon aligned with main content, header title/subtitle and bottom slot indented size of icon + margin */\n@media screen and (min-width: 600px) and (max-width: 1365px) {\n  .ukg-header-icon-container {\n    order: 0;\n    margin-left: 0;\n    margin-right: var(--ukg_ref_spacing_16);\n  }\n  .ukg-header-slot-bottom {\n    margin-left: var(--icon-total-spacing);\n  }\n}\n/* 1366+ : bottom slot content still indented */\n@media screen and (min-with: 1366px) {\n  .ukg-header-slot-bottom {\n    margin-left: var(--icon-total-spacing);\n  }\n}\n\n/* 1366+ javascript will change class if side nav drawer closed and hub header width is >= 1366px || :  nav drawer opened and hub header width is >= 1640px, illustrative icon is outdented */\n.ukg-hub-header.icon-outdented .ukg-header-icon-container {\n  order: 0;\n  margin-left: var(--icon-total-spacing-negative);\n  margin-right: var(--ukg_ref_spacing_16);\n}\n@media screen and (min-with: 1366px) {\n  .ukg-hub-header.icon-outdented .ukg-header-slot-bottom {\n    margin-left: var(--icon-total-spacing);\n  }\n}\n\n\n/* and if nav opened when hub-header (container) is 1366 - 1639px javascript will change class and  illustrative icon aligned with main content, header title/subtitle and bottom slot indented size of icon + margin */\n.ukg-hub-header.icon-indented .ukg-header-icon-container {\n  order: 0;\n  margin-left: 0;\n  margin-right: var(--ukg_ref_spacing_16);\n}\n@media screen and (min-with: 1366px) {\n  .ukg-hub-header.icon-indented .ukg-header-slot-bottom {\n    margin-left: var(--icon-total-spacing);\n  }\n}\n</style>\n  <div class="ukg-hub-header" grid-size="${this.gridSize}">\n  <div class="ukg-header-content-container">\n    <div class="ukg-header-content">\n      <div class="ukg-header-icon-container">\n        <img class="ukg-header-icon" src="${this.icon}">\n      </div>\n      <div class="ukg-header-text-container">\n        <div class="ukg-header-text">\n          <h1 class="ukg-header-title ukg_sys_text_display_sm_onLight">${this.title}</h1>\n          <p class="ukg-header-subtitle">${this.subtitle}</p>\n        </div>\n      </div>\n      <div class="ukg-header-slot-end">\n        <slot name="end"></slot>\n      </div>\n    </div>\n    <div class="ukg-header-slot-bottom">\n      <slot name="bottom"></slot>\n    </div>\n  </div>\n  <ukg-divider has-margin="false"></ukg-divider>\n</div>\n    `}}window.addEventListener("resize",(n=>{const e=document.querySelector("hub-header");e&&e.changeHubHeaderStyles()})),customElements.define("hub-header",HubHeader);export default HubHeader;
+class HubHeader extends HTMLElement {
+  constructor() {
+    super();
+    this.shadow = this.attachShadow({ mode: "open" });
+    this.resizeObserver = new ResizeObserver(this.handleResize.bind(this)); // Create the ResizeObserver
+  }
+  get containerId() {
+    return this.getAttribute('container-id');
+  }
+
+  get gridSize() {
+    return this.getAttribute("grid-size");
+  }
+
+  get icon() {
+    return this.getAttribute("icon");
+  }
+
+  get title() {
+    return this.getAttribute("title");
+  }
+
+  get subtitle() {
+    return this.getAttribute("subtitle");
+  }
+
+  set containerId(val) {
+    this.setAttribute('container-id', val);
+  }
+
+  set gridSize(val) {
+    this.setAttribute("grid-size", val);
+  }
+
+  set icon(val) {
+    this.setAttribute("icon", val);
+  }
+
+  set title(val) {
+    this.setAttribute("title", val);
+  }
+
+  set subtitle(val) {
+    this.setAttribute("subtitle", val);
+  }
+
+  static get observedAttributes() {
+    return ["grid-size", "icon", "title", "subtitle"];
+  }
+
+  attributeChangedCallback(prop, oldVal, newVal) {
+    if (prop === "grid-size" || prop === "icon" || prop === "title" || prop === "subtitle") {
+      this.render();
+    }
+  }
+
+  connectedCallback() {
+    // Add the ResizeObserver to monitor the size of the element
+    this.resizeObserver.observe(this);
+    this.render();
+  }
+
+  disconnectedCallback() {
+    // Disconnect the ResizeObserver when the element is removed
+    this.resizeObserver.disconnect();
+  }
+
+  handleResize(entries) {
+    for (const entry of entries) {
+      const width = entry.contentRect.width;
+      const height = entry.contentRect.height;
+
+      // Use width and height to adjust as needed
+      console.log(`Width: ${width}px, Height: ${height}px`);
+      this.changeHubHeaderStyles();
+    }
+  }
+
+  changeHubHeaderStyles() {
+    const hubHeader = this.shadow.querySelector(".ukg-hub-header"); // Use shadow DOM to query the element
+    let containerWidth = this.offsetWidth;
+    if (containerWidth < 1366) {
+      hubHeader.className = 'ukg-hub-header', 'icon-indented';
+    } else if (containerWidth >= 1366) {
+      hubHeader.className = 'ukg-hub-header', 'icon-outdented';
+    }
+    else {
+      hubHeader.className = 'ukg-hub-header';
+    }
+  }
+
+  render() {
+    // Render your component content based on attributes
+    this.shadow.innerHTML = `
+    <style>
+:host {
+  --ukg_sys_color_surface_light: #fff;
+  --icon-size: 112px;
+  --ukg_ref_spacing_56: 3.5rem;
+  --ukg_ref_spacing_40: 2.5rem;
+  --ukg_ref_spacing_32: 2rem;
+  --ukg_ref_spacing_16: 1rem;
+  --ukg_sys_color_text_highEmphasis_onLight: rgba(0, 0, 0, 0.87);
+  --ukg_sys_color_border_midEmphasis_onLight: rgba(0, 0, 0, 0.15);
+  --icon-margin: var(--ukg_ref_spacing_16);
+  --icon-total-spacing: calc(var(--icon-size) + var(--icon-margin));
+  --icon-total-spacing-negative: calc(var(--icon-total-spacing) * -1);
+  }
+
+  .ukg-hub-header {
+    box-sizing: border-box;
+    background-color: var(--ukg_sys_color_surface_light);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--ukg_sys_color_border_midEmphasis_onLight);
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  /* mimic grid margins */
+  @media screen and (max-width: 599px) {
+    .ukg-hub-header {
+      padding-left: var(--ukg_ref_spacing_16);
+      padding-right: var(--ukg_ref_spacing_16);
+    }
+  }
+  @media screen and (min-width: 600px) and (max-width: 767px) {
+    .ukg-hub-header {
+      padding-left: var(--ukg_ref_spacing_32);
+      padding-right: var(--ukg_ref_spacing_32);
+    }
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .ukg-hub-header {
+      padding-left: var(--ukg_ref_spacing_40);
+      padding-right: var(--ukg_ref_spacing_40);
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    .ukg-hub-header {
+      padding-left: var(--ukg_ref_spacing_56);
+      padding-right: var(--ukg_ref_spacing_56);
+    }
+  }
+  .ukg-header-content-container {
+  margin: var(--ukg_ref_spacing_16) auto;
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+/* mimic grid functionality */
+.ukg-hub-header[grid-size="960"] .ukg-header-content-container,
+.ukg-hub-header[grid-size="default"] .ukg-header-content-container,
+.ukg-hub-header[grid-size=""] .ukg-header-content-container {
+  max-width: 960px;
+}
+.ukg-hub-header[grid-size="1280"] .ukg-header-content-container,
+.ukg-hub-header[grid-size="large-width"] .ukg-header-content-container {
+  max-width: 1280px;
+}
+
+.ukg-header-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ukg-header-icon-container {
+  order: 0;
+  align-self: auto;
+  flex: 0 0 var(--icon-size);
+  margin-right: var(--ukg_ref_spacing_16);
+}
+
+.ukg-header-icon {
+  height: var(--icon-size);
+  width: var(--icon-size);
+}
+
+.ukg-header-text-container {
+  order: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  min-height: var(--icon-size);
+}
+.ukg-header-text {
+  flex: 1 1 auto;
+  align-self: center;
+  margin-right: 1rem;
+}
+
+.ukg-header-title {
+  /* ukg_sys_text_display_sm_onLight is stubbed in here */
+  line-height: 2.5rem;
+  font-family: Volte Rounded, sans-serif;
+  color: var(--ukg_sys_color_text_highEmphasis_onLight);
+  margin-bottom: 1rem;
+  margin-top: 0;
+  font-weight: 500;
+  letter-spacing: -0.0125em;
+  font-size: 2rem;
+  /* needed for header-title */
+  margin: 0;
+}
+
+.ukg-header-subtitle {
+  margin: 0;
+}
+
+.ukg-header-slot-end {
+  order: 0;
+  flex: 1 1 auto;
+  align-self: center;
+  display: flex;
+  justify-content: flex-end;
+}
+.ukg-header-slot-bottom {
+  margin-left: var(--icon-total-spacing);
+}
+
+/* responsive illustrative icon changes */
+/*  0 - 359 :if screen less than 360px don't show illustrative icon */
+    @media screen and (max-width: 359px) {
+    .ukg-header-icon-container, .ukg-header-icon {
+      display: none;
+    }
+    .ukg-header-text-container {
+      order: 0;
+      width: 100%;
+    }
+    
+    .ukg-header-slot-end {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .ukg-header-slot-bottom {
+          margin-left: 0;
+    }
+  }
+    
+    /* 0 - 599 : if screen <=599 illustrative icon is aligned right (flex order 1) */
+@media screen and (max-width: 599px) {
+  .ukg-header-icon-container {
+    order: 1;
+    margin-left: var(--ukg_ref_spacing_16);
+    margin-right: 0;
+  }
+
+  .ukg-header-text-container {
+    order: 0;
+    align-self: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .ukg-header-text {
+    margin-right: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-right: 0;
+  }
+
+  /* wrap end slot */
+  .ukg-header-slot-end {
+    flex: 1 0 100%;
+    order: 2;
+    align-self: flex-start;
+    justify-content: flex-start;
+    align-items: 
+    width: 100%;
+    background: purple;
+  }
+  .ukg-header-slot-bottom {
+  margin-left: 0
+}
+}
+/* 600 - 1365 : show illustrative icon aligned with main content, header title/subtitle and bottom slot indented size of icon + margin */
+@media screen and (min-width: 600px) and (max-width: 1365px) {
+  .ukg-header-icon-container {
+    order: 0;
+    margin-left: 0;
+    margin-right: var(--ukg_ref_spacing_16);
+  }
+  .ukg-header-slot-bottom {
+    margin-left: var(--icon-total-spacing);
+  }
+}
+/* 1366+ : bottom slot content still indented */
+@media screen and (min-with: 1366px) {
+  .ukg-header-slot-bottom {
+    margin-left: var(--icon-total-spacing);
+  }
+}
+
+/* 1366+ javascript will change class if side nav drawer closed and hub header width is >= 1366px || :  nav drawer opened and hub header width is >= 1640px, illustrative icon is outdented */
+.ukg-hub-header.icon-outdented .ukg-header-icon-container {
+  order: 0;
+  margin-left: var(--icon-total-spacing-negative);
+  margin-right: var(--ukg_ref_spacing_16);
+}
+@media screen and (min-with: 1366px) {
+  .ukg-hub-header.icon-outdented .ukg-header-slot-bottom {
+    margin-left: var(--icon-total-spacing);
+  }
+}
+
+
+/* and if nav opened when hub-header (container) is 1366 - 1639px javascript will change class and  illustrative icon aligned with main content, header title/subtitle and bottom slot indented size of icon + margin */
+.ukg-hub-header.icon-indented .ukg-header-icon-container {
+  order: 0;
+  margin-left: 0;
+  margin-right: var(--ukg_ref_spacing_16);
+}
+@media screen and (min-with: 1366px) {
+  .ukg-hub-header.icon-indented .ukg-header-slot-bottom {
+    margin-left: var(--icon-total-spacing);
+  }
+}
+</style>
+  <div class="ukg-hub-header" grid-size="${this.gridSize}">
+  <div class="ukg-header-content-container">
+    <div class="ukg-header-content">
+      <div class="ukg-header-icon-container">
+        <img class="ukg-header-icon" src="${this.icon}">
+      </div>
+      <div class="ukg-header-text-container">
+        <div class="ukg-header-text">
+          <h1 class="ukg-header-title ukg_sys_text_display_sm_onLight">${this.title}</h1>
+          <p class="ukg-header-subtitle">${this.subtitle}</p>
+        </div>
+      </div>
+      <div class="ukg-header-slot-end">
+        <slot name="end"></slot>
+      </div>
+    </div>
+    <div class="ukg-header-slot-bottom">
+      <slot name="bottom"></slot>
+    </div>
+  </div>
+  <ukg-divider has-margin="false"></ukg-divider>
+</div>
+    `;
+  }
+};
+// Attaching the event listener function to window's resize event
+window.addEventListener("resize", (event) => {
+  const hubHeader = document.querySelector("hub-header");
+  if (hubHeader) {
+    hubHeader.changeHubHeaderStyles();
+  }
+});
+
+customElements.define("hub-header", HubHeader);
